@@ -1,0 +1,456 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AURA LUXE — Multi-Vendor Fashion Platform Technical Guide</title>
+  
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600;700&family=Playfair+Display:wght@700;800&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --gold: #c5a059;
+      --gold-dark: #8c6b2d;
+      --dark: #0a0a0a;
+      --gray-light: #f8f7f4;
+      --border: #e6e2db;
+      --text: #1a1a1a;
+      --text-muted: #666666;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      color: var(--text);
+      background-color: #ffffff;
+      line-height: 1.6;
+      font-size: 13px;
+    }
+
+    .container {
+      max-width: 960px;
+      margin: 0 auto;
+      padding: 40px 30px;
+    }
+
+    /* Print Controls */
+    .print-bar {
+      background: #0a0a0a;
+      color: white;
+      padding: 14px 24px;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 2px solid var(--gold);
+    }
+
+    .btn-print {
+      background: linear-gradient(135deg, #d4af37, #c5a059);
+      color: #000;
+      border: none;
+      padding: 8px 18px;
+      font-weight: 700;
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      cursor: pointer;
+      border-radius: 2px;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .btn-print:hover {
+      filter: brightness(1.1);
+    }
+
+    /* Header */
+    .doc-header {
+      text-align: center;
+      padding-bottom: 30px;
+      margin-bottom: 35px;
+      border-bottom: 2px solid var(--border);
+    }
+
+    .doc-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 32px;
+      letter-spacing: 0.18em;
+      color: var(--dark);
+      text-transform: uppercase;
+      margin-bottom: 6px;
+    }
+
+    .doc-subtitle {
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.25em;
+      color: var(--gold-dark);
+      font-weight: 700;
+      margin-bottom: 15px;
+    }
+
+    .badge {
+      display: inline-block;
+      padding: 3px 10px;
+      background: #0a0a0a;
+      color: #fff;
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      border-radius: 2px;
+    }
+
+    /* Section Styles */
+    h2 {
+      font-family: 'Playfair Display', serif;
+      font-size: 20px;
+      color: var(--dark);
+      margin-top: 35px;
+      margin-bottom: 15px;
+      padding-bottom: 6px;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    h3 {
+      font-family: 'Playfair Display', serif;
+      font-size: 15px;
+      color: var(--dark);
+      margin-top: 20px;
+      margin-bottom: 8px;
+    }
+
+    p {
+      margin-bottom: 12px;
+      color: #333;
+    }
+
+    ul, ol {
+      margin-left: 20px;
+      margin-bottom: 15px;
+    }
+
+    li {
+      margin-bottom: 6px;
+    }
+
+    /* Tables */
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 15px 0 25px 0;
+      font-size: 12px;
+    }
+
+    th, td {
+      padding: 9px 12px;
+      text-align: left;
+      border: 1px solid var(--border);
+    }
+
+    th {
+      background-color: var(--gray-light);
+      font-weight: 700;
+      text-transform: uppercase;
+      font-size: 10px;
+      letter-spacing: 0.08em;
+      color: var(--dark);
+    }
+
+    tr:nth-child(even) {
+      background-color: #fdfdfc;
+    }
+
+    /* Callout Boxes */
+    .callout {
+      background-color: var(--gray-light);
+      border-left: 4px solid var(--gold);
+      padding: 14px 18px;
+      margin: 15px 0;
+      border-radius: 0 4px 4px 0;
+    }
+
+    .callout-title {
+      font-weight: 700;
+      color: var(--dark);
+      margin-bottom: 4px;
+      text-transform: uppercase;
+      font-size: 11px;
+      letter-spacing: 0.1em;
+    }
+
+    /* Code Snippets */
+    pre, code {
+      font-family: 'Courier New', Courier, monospace;
+      background: #f4f2ec;
+      border-radius: 3px;
+    }
+
+    code {
+      padding: 2px 5px;
+      font-size: 11px;
+      color: #92400e;
+    }
+
+    pre {
+      padding: 12px 16px;
+      margin: 12px 0;
+      overflow-x: auto;
+      font-size: 11px;
+      line-height: 1.4;
+      border: 1px solid var(--border);
+    }
+
+    .page-break {
+      page-break-before: always;
+    }
+
+    @media print {
+      .print-bar {
+        display: none !important;
+      }
+      body {
+        padding: 0;
+        background: white;
+      }
+      .container {
+        padding: 20px 0;
+        max-width: 100%;
+      }
+      a {
+        text-decoration: none;
+        color: inherit;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Top Action Bar for 1-Click PDF Save -->
+  <div class="print-bar">
+    <div>
+      <strong style="font-family: 'Playfair Display', serif; font-size: 16px; letter-spacing: 0.1em; color: var(--gold);">
+        AURA LUXE
+      </strong>
+      <span style="font-size: 11px; color: #aaa; margin-left: 10px;">
+        Comprehensive Full-Stack Learning Document & Technical Reference
+      </span>
+    </div>
+    <button onclick="window.print()" class="btn-print">
+      🖨️ Save as PDF / Print
+    </button>
+  </div>
+
+  <div class="container">
+    <!-- Header -->
+    <div class="doc-header">
+      <div class="badge">FARFETCH-INSPIRED MULTI-VENDOR ARCHITECTURE</div>
+      <h1 class="doc-title">AURA LUXE</h1>
+      <div class="doc-subtitle">Multi-Vendor SaaS Luxury Fashion Portal — Complete Developer Guide</div>
+      <p style="font-size: 12px; color: var(--text-muted); max-width: 600px; margin: 0 auto;">
+        An end-to-end technical breakdown of the 5 Core Pages, 2 SaaS Dashboards, React State Engine, Role-Based Access Control (RBAC), Multi-Currency System, and CSV/JSON Export Tools.
+      </p>
+    </div>
+
+    <!-- Section 1 -->
+    <h2>1. Executive Summary & Tech Stack</h2>
+    <p>
+      <strong>AURA LUXE</strong> is an enterprise multi-vendor fashion platform designed around the luxury aesthetics of <em>FARFETCH</em>, connecting global clientele with verified European & Asian designer boutiques (Paris, Milan, Tokyo, London).
+    </p>
+
+    <table>
+      <thead>
+        <tr>
+          <th>Layer</th>
+          <th>Technology</th>
+          <th>Purpose & Responsibility</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>Frontend Core</strong></td>
+          <td>React 19 + Vite 8</td>
+          <td>High-speed SPA with fast hot module replacement and component modularity.</td>
+        </tr>
+        <tr>
+          <td><strong>Styling Engine</strong></td>
+          <td>Tailwind CSS + Custom Luxury Tokens</td>
+          <td>Ultra-refined typography, HSL gold gradients, and responsive layouts.</td>
+        </tr>
+        <tr>
+          <td><strong>Global State</strong></td>
+          <td>React Context API (<code>AppContext.jsx</code>)</td>
+          <td>Centralized state for cart, wishlist, orders, products, vendors, and RBAC.</td>
+        </tr>
+        <tr>
+          <td><strong>Persistence</strong></td>
+          <td>Browser <code>localStorage</code></td>
+          <td>Client-side persistence of catalog edits, orders, and authentication states.</td>
+        </tr>
+        <tr>
+          <td><strong>Export Engine</strong></td>
+          <td>Native JavaScript Blob Engine</td>
+          <td>One-click client-side export of structured datasets to CSV & JSON.</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <!-- Section 2 -->
+    <h2>2. The 5 Core Storefront Pages</h2>
+
+    <h3>01. Home Page (<code>HomePage.jsx</code>)</h3>
+    <ul>
+      <li><strong>Editorial Hero Carousel</strong>: High-fashion imagery with interactive slide indicators and direct department triggers.</li>
+      <li><strong>Designer Marquee</strong>: Direct navigation to filtered runway collections for <em>Saint Laurent, Bottega Veneta, Prada, Jacquemus, and Loewe</em>.</li>
+      <li><strong>Curated Departments</strong>: 3:4 aspect-ratio category cards displaying live piece counts.</li>
+      <li><strong>Trending Runway Drops</strong>: Real-time product highlights with 1-click <em>Quick View modal</em> and wishlist toggling.</li>
+      <li><strong>Boutique Spotlight</strong>: Verified independent boutiques from Paris, Milan, Tokyo, and London.</li>
+    </ul>
+
+    <h3>02. Shop / Catalog Page (<code>ShopPage.jsx</code>)</h3>
+    <ul>
+      <li><strong>Multi-Faceted Sidebar Filters</strong>: Department (Women, Men, Bags, Shoes, Jewelry), Partner Boutique, Designer Brand, Max Price Range Slider ($500–$10,000+), In-Stock Only, and Rating threshold.</li>
+      <li><strong>Search Autocomplete</strong>: Live matching against title, brand, category, and vendor city.</li>
+      <li><strong>Grid Layout Switcher</strong>: 4-Columns, 3-Columns, or List View mode.</li>
+    </ul>
+
+    <h3>03. Product Details Page (<code>ProductDetailPage.jsx</code>)</h3>
+    <ul>
+      <li><strong>Multi-Angle Gallery</strong>: Image switcher with preview zoom.</li>
+      <li><strong>Runway Specs</strong>: Color swatches with hex previews, size selector with live stock alerts, and <strong>International Size Conversion Chart</strong> modal (FR, IT, UK, US, JP in cm & inches).</li>
+      <li><strong>Direct Boutique Card</strong>: Seller location, buyer rating, and express shipping SLA.</li>
+      <li><strong>Interactive Reviews</strong>: Star rating aggregator and verified buyer review submission form.</li>
+    </ul>
+
+    <h3>04. Cart & Checkout Page (<code>CartCheckoutPage.jsx</code>)</h3>
+    <ul>
+      <li><strong>Multi-Vendor Clustering</strong>: Cart items automatically grouped by fulfillment boutique.</li>
+      <li><strong>Coupon Engine</strong>: Validates promo codes like <code>LUXURY2026</code> (15% off) and <code>FREESHIP</code>.</li>
+      <li><strong>Courier SLAs</strong>: <em>DHL Express Luxury Air</em>, <em>FedEx Priority</em>, and <em>White Glove Concierge</em>.</li>
+      <li><strong>Payment Simulator</strong>: Encrypted Credit Card with live card preview, UPI QR code, NetBanking, and COD.</li>
+      <li><strong>Confetti Burst</strong>: Triggers visual celebration upon order placement and auto-redirects to live tracking.</li>
+    </ul>
+
+    <h3>05. Client Account Page (<code>AccountPage.jsx</code>)</h3>
+    <ul>
+      <li><strong>VIP Tier Badge</strong>: <em>FARFETCH Private Client (Gold VIP)</em>.</li>
+      <li><strong>Live 5-Stage Milestone Tracker</strong>: <code>Order Placed</code> → <code>Boutique Dispatched</code> → <code>Customs Clearance</code> → <code>Out for Delivery</code> → <code>Delivered</code> with tracking number and timeline notes.</li>
+      <li><strong>Wishlist Manager</strong>: 1-click "Move All to Shopping Bag".</li>
+      <li><strong>Saved Addresses & Cards</strong>: Multi-residence address book and saved payment cards.</li>
+    </ul>
+
+    <div class="page-break"></div>
+
+    <!-- Section 3 -->
+    <h2>3. The 2 SaaS Dashboards</h2>
+
+    <h3>🏬 Vendor Boutique Portal (<code>VendorDashboard.jsx</code>)</h3>
+    <p>A multi-tenant seller suite for independent fashion boutiques:</p>
+    <ul>
+      <li><strong>Boutique KPIs</strong>: Gross revenue, escrow payout balance, active orders count, and monthly sales chart.</li>
+      <li><strong>Catalog Manager</strong>: Interactive modal to add new runway pieces (title, brand, category, price, SKU, sizes, stock count, lookbook URLs).</li>
+      <li><strong>Orders Pipeline</strong>: Real-time dropdown to advance order status and update tracking carrier codes.</li>
+      <li><strong>Earnings & Payouts</strong>: Escrow ledger and wire withdrawal requests to registered bank accounts.</li>
+      <li><strong>Export Suite</strong>: Instant CSV/JSON downloads for inventory and financial reconciliation.</li>
+    </ul>
+
+    <h3>🛡️ Global Admin Suite (<code>AdminDashboard.jsx</code>)</h3>
+    <p>The root control center for platform operators:</p>
+    <ul>
+      <li><strong>Platform GMV & Commission Retained</strong>: Total gross merchandise value and platform SaaS take.</li>
+      <li><strong>Boutique Moderation</strong>: Approve, suspend, or adjust boutique commission rates (10%–20%).</li>
+      <li><strong>Catalog Moderation</strong>: Toggle homepage featured runway pieces.</li>
+      <li><strong>Client Access Control (RBAC Matrix)</strong>: Interactive permission matrix across <em>Super Admin</em>, <em>Vendor Partner</em>, and <em>VIP Client</em> personas.</li>
+      <li><strong>Platform Settings</strong>: Global announcement banner editor and tax rates configuration.</li>
+    </ul>
+
+    <!-- Section 4 -->
+    <h2>4. Core Code Functions Explained</h2>
+
+    <div class="callout">
+      <div class="callout-title">Function: formatPrice(amountInUSD)</div>
+      <p>Dynamically converts and formats prices according to active currency (<code>USD</code>, <code>EUR</code>, <code>GBP</code>, <code>INR</code>) with international locale rules.</p>
+    </div>
+
+    <pre><code>const formatPrice = (amountInUSD) => {
+  const rateObj = CURRENCY_RATES[currency] || CURRENCY_RATES.USD;
+  const converted = amountInUSD * rateObj.rate;
+  if (currency === 'INR') {
+    return `₹${Math.round(converted).toLocaleString('en-IN')}`;
+  }
+  return `${rateObj.symbol}${converted.toLocaleString('en-US', {
+    minimumFractionDigits: 0,
+    maximumFractionDigits: 0
+  })}`;
+};</code></pre>
+
+    <div class="callout">
+      <div class="callout-title">Function: exportData(type, format)</div>
+      <p>Generates client-side CSV or JSON files from memory and triggers browser file downloads with zero backend dependency.</p>
+    </div>
+
+    <pre><code>const exportData = (type = 'orders', format = 'csv') => {
+  let dataset = mapDatasetByType(type);
+  if (format === 'json') {
+    const jsonStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(dataset, null, 2));
+    triggerDownload(jsonStr, `aura_luxe_${type}.json`);
+  } else {
+    const csvRows = [Object.keys(dataset[0]).join(',')];
+    dataset.forEach(row => csvRows.push(Object.values(row).map(v => `"${v}"`).join(',')));
+    const csvStr = "data:text/csv;charset=utf-8," + encodeURIComponent(csvRows.join('\n'));
+    triggerDownload(csvStr, `aura_luxe_${type}.csv`);
+  }
+};</code></pre>
+
+    <!-- Section 5 -->
+    <h2>5. Quick Persona Switcher Guide</h2>
+    <table>
+      <thead>
+        <tr>
+          <th>Persona Role</th>
+          <th>Demo Account</th>
+          <th>Available Privileges & Views</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>VIP Client</strong></td>
+          <td>Sophia Laurent<br><code>sophia.laurent@luxury-client.com</code></td>
+          <td>Browse collections, manage wishlist, place orders, live parcel tracking, and manage residences.</td>
+        </tr>
+        <tr>
+          <td><strong>Vendor Boutique</strong></td>
+          <td>Jean-Paul Gautier<br><code>manager@atelier-montaigne.paris</code></td>
+          <td>Manage boutique catalog, add products, advance order statuses, request escrow payouts, export CSV/JSON.</td>
+        </tr>
+        <tr>
+          <td><strong>Super Admin</strong></td>
+          <td>Alexander Vance<br><code>alexander.vance@auraluxe.com</code></td>
+          <td>Platform-wide GMV analytics, boutique approval/suspension, commission rate adjustments, RBAC permissions.</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <!-- Footer -->
+    <div style="text-align: center; margin-top: 50px; padding-top: 20px; border-top: 1px solid var(--border); font-size: 11px; color: var(--text-muted);">
+      © 2026 AURA LUXE Global Multi-Vendor Fashion Platform. Inspired by FARFETCH Architecture.
+    </div>
+  </div>
+
+</body>
+</html>
