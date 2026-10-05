@@ -14,7 +14,8 @@ import {
   LogOut,
   ArrowRight,
   X,
-  Check
+  Check,
+  Menu
 } from 'lucide-react';
 import { CURRENCY_RATES, CATEGORIES } from '../data/mockData';
 
@@ -41,6 +42,7 @@ export const Navbar = () => {
   const [isUserMenuOpen, setIsUserMenuOpen] = useState(false);
   const [isCurrencyOpen, setIsCurrencyOpen] = useState(false);
   const [isRoleMenuOpen, setIsRoleMenuOpen] = useState(false);
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const searchInputRef = useRef(null);
 
   const cartItemsCount = cart.reduce((total, item) => total + item.quantity, 0);
@@ -67,12 +69,14 @@ export const Navbar = () => {
     if (searchQuery.trim()) {
       navigateTo('shop');
       setIsSearchOpen(false);
+      setIsMobileMenuOpen(false);
     }
   };
 
   const handleSelectProduct = (productId) => {
     navigateTo('product-detail', productId);
     setIsSearchOpen(false);
+    setIsMobileMenuOpen(false);
     setSearchQuery('');
   };
 
@@ -80,39 +84,39 @@ export const Navbar = () => {
     <header className="sticky top-0 z-50 bg-white border-b border-[#ece8e1]">
       {/* 1. Top Luxury Announcement & Multi-Vendor Role Bar */}
       <div className="bg-[#0c0c0c] text-white text-xs border-b border-[#222]">
-        <div className="luxury-container py-2 flex flex-col md:flex-row items-center justify-between gap-2">
-          {/* Announcement */}
-          <div className="flex items-center gap-2 text-[11px] tracking-wide text-[#d4af37]">
-            <Sparkles size={13} className="text-[#d4af37] animate-pulse" />
-            <span className="font-medium">SS26 PARIS COUTURE EDIT:</span>
-            <span className="text-[#dedede] hidden sm:inline">
-              Complimentary Global Express Delivery on orders over $500 • Verified Boutique Authenticity
+        <div className="luxury-container py-1.5 sm:py-2 flex items-center justify-between gap-2">
+          {/* Announcement (hidden on extra small screens or compact badge) */}
+          <div className="flex items-center gap-1.5 text-[10px] sm:text-[11px] tracking-wide text-[#d4af37] min-w-0 truncate">
+            <Sparkles size={12} className="text-[#d4af37] animate-pulse shrink-0" />
+            <span className="font-semibold whitespace-nowrap">SS26 PARIS EDIT</span>
+            <span className="text-[#dedede] hidden md:inline truncate">
+              • Express Worldwide Delivery on $500+ • Verified Boutique Authenticity
             </span>
           </div>
 
           {/* Right Controls: Role Switcher & Currency */}
-          <div className="flex items-center gap-4 text-[11px]">
+          <div className="flex items-center gap-2 sm:gap-4 text-[10px] sm:text-[11px] shrink-0">
             {/* Quick Portal Switcher */}
             <div className="relative">
               <button
                 onClick={() => setIsRoleMenuOpen(!isRoleMenuOpen)}
-                className="flex items-center gap-1.5 px-2.5 py-1 rounded bg-[#1c1c1c] hover:bg-[#2a2a2a] border border-[#333] text-[#e8e8e8] transition-colors"
+                className="flex items-center gap-1 sm:gap-1.5 px-2 py-0.5 sm:px-2.5 sm:py-1 rounded bg-[#1c1c1c] hover:bg-[#2a2a2a] border border-[#333] text-[#e8e8e8] transition-colors"
                 title="Switch portal perspective"
               >
-                {activeRole === 'customer' && <span className="w-2 h-2 rounded-full bg-emerald-400"></span>}
-                {activeRole === 'vendor' && <span className="w-2 h-2 rounded-full bg-amber-400"></span>}
-                {activeRole === 'admin' && <span className="w-2 h-2 rounded-full bg-purple-400"></span>}
-                <span className="font-semibold tracking-wider uppercase text-[10px]">
-                  {activeRole === 'customer' && 'VIP Customer View'}
-                  {activeRole === 'vendor' && 'Vendor Boutique Portal'}
-                  {activeRole === 'admin' && 'Global Admin Suite'}
+                {activeRole === 'customer' && <span className="w-1.5 h-1.5 sm:w-2 sm:h-2 rounded-full bg-emerald-400"></span>}
+                {activeRole === 'vendor' && <span className="w-1.5 h-1.5 sm:w-2 sm:h-2 rounded-full bg-amber-400"></span>}
+                {activeRole === 'admin' && <span className="w-1.5 h-1.5 sm:w-2 sm:h-2 rounded-full bg-purple-400"></span>}
+                <span className="font-semibold tracking-wider uppercase text-[9px] sm:text-[10px]">
+                  {activeRole === 'customer' && 'VIP Customer'}
+                  {activeRole === 'vendor' && 'Vendor Suite'}
+                  {activeRole === 'admin' && 'Admin HQ'}
                 </span>
-                <ChevronDown size={11} className="text-[#888]" />
+                <ChevronDown size={10} className="text-[#888]" />
               </button>
 
               {isRoleMenuOpen && (
                 <div
-                  className="absolute right-0 mt-1.5 w-60 bg-[#161616] border border-[#333] shadow-2xl rounded-sm py-1.5 z-50"
+                  className="absolute right-0 mt-1.5 w-56 sm:w-60 bg-[#161616] border border-[#333] shadow-2xl rounded-sm py-1.5 z-50"
                   onMouseLeave={() => setIsRoleMenuOpen(false)}
                 >
                   <div className="px-3 py-1.5 text-[10px] text-[#777] uppercase font-bold tracking-widest border-b border-[#262626]">
@@ -184,9 +188,9 @@ export const Navbar = () => {
                 onClick={() => setIsCurrencyOpen(!isCurrencyOpen)}
                 className="flex items-center gap-1 text-[#aaa] hover:text-white transition-colors"
               >
-                <Globe size={12} />
-                <span className="font-semibold">{currency}</span>
-                <ChevronDown size={10} />
+                <Globe size={11} />
+                <span className="font-semibold text-[10px] sm:text-xs">{currency}</span>
+                <ChevronDown size={9} />
               </button>
 
               {isCurrencyOpen && (
@@ -217,31 +221,51 @@ export const Navbar = () => {
       </div>
 
       {/* 2. Main Luxury Header */}
-      <div className="luxury-container py-3.5 flex items-center justify-between gap-4">
-        {/* Left: Search Trigger & Quick Nav */}
-        <div className="flex items-center gap-5 flex-1 max-w-xs">
+      <div className="luxury-container py-2.5 sm:py-3.5 flex items-center justify-between gap-2 sm:gap-4">
+        {/* Left: Mobile Hamburger & Search (Mobile) / Search bar (Desktop) */}
+        <div className="flex items-center gap-1.5 sm:gap-2 md:flex-1 md:max-w-xs">
+          {/* Mobile menu trigger */}
+          <button
+            onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+            className="md:hidden p-1.5 text-[#222] hover:text-black rounded hover:bg-gray-100 transition-colors"
+            title="Toggle Menu"
+            aria-label="Toggle navigation menu"
+          >
+            {isMobileMenuOpen ? <X size={20} /> : <Menu size={20} />}
+          </button>
+
+          {/* Mobile Search Icon Button */}
           <button
             onClick={() => setIsSearchOpen(true)}
-            className="flex items-center gap-2.5 text-xs text-[#555] hover:text-black py-1.5 px-3 rounded border border-[#e0dcd4] bg-[#faf8f5] hover:border-[#aaa] transition-all w-full text-left"
+            className="md:hidden p-1.5 text-[#444] hover:text-black rounded hover:bg-gray-100 transition-colors"
+            title="Search"
+            aria-label="Search"
+          >
+            <Search size={19} />
+          </button>
+
+          {/* Desktop Search Trigger */}
+          <button
+            onClick={() => setIsSearchOpen(true)}
+            className="hidden md:flex items-center gap-2.5 text-xs text-[#555] hover:text-black py-1.5 px-3 rounded border border-[#e0dcd4] bg-[#faf8f5] hover:border-[#aaa] transition-all w-full text-left"
           >
             <Search size={14} className="text-[#777]" />
-            <span className="hidden sm:inline">Search runway, designers, items...</span>
-            <span className="sm:hidden">Search...</span>
+            <span>Search runway, designers, items...</span>
           </button>
         </div>
 
         {/* Center: Brand Editorial Logo */}
-        <div className="text-center cursor-pointer select-none" onClick={() => navigateTo('home')}>
-          <h1 className="font-serif text-2xl md:text-3xl font-bold tracking-[0.22em] text-[#0a0a0a] uppercase transition-transform duration-300 hover:scale-[1.01]">
+        <div className="text-center cursor-pointer select-none px-1" onClick={() => navigateTo('home')}>
+          <h1 className="font-serif text-lg sm:text-2xl md:text-3xl font-bold tracking-[0.16em] sm:tracking-[0.22em] text-[#0a0a0a] uppercase transition-transform duration-300 hover:scale-[1.01] whitespace-nowrap">
             AURA LUXE
           </h1>
-          <p className="text-[9px] tracking-[0.35em] text-[#7a7a7a] uppercase font-sans font-medium -mt-0.5">
+          <p className="text-[7.5px] sm:text-[9px] tracking-[0.22em] sm:tracking-[0.35em] text-[#7a7a7a] uppercase font-sans font-medium -mt-0.5 whitespace-nowrap">
             PARIS • MILANO • TOKYO • LONDON
           </p>
         </div>
 
         {/* Right: Actions (Wishlist, Shopping Bag, Account) */}
-        <div className="flex items-center justify-end gap-3 md:gap-5 flex-1">
+        <div className="flex items-center justify-end gap-1.5 sm:gap-3 md:gap-5 md:flex-1">
           {/* Quick Vendor / Admin Dashboard link if active */}
           {activeRole === 'vendor' && (
             <button
@@ -274,12 +298,12 @@ export const Navbar = () => {
           {/* Wishlist Button */}
           <button
             onClick={() => navigateTo('account')}
-            className="relative p-2 text-[#222] hover:text-black transition-colors"
+            className="relative p-1.5 sm:p-2 text-[#222] hover:text-black transition-colors"
             title="Wishlist"
           >
-            <Heart size={20} className={wishlist.length > 0 ? "fill-[#c5a059] text-[#c5a059]" : ""} />
+            <Heart size={19} className={wishlist.length > 0 ? "fill-[#c5a059] text-[#c5a059]" : ""} />
             {wishlist.length > 0 && (
-              <span className="absolute top-1 right-1 w-4 h-4 bg-[#c5a059] text-white text-[9px] font-bold rounded-full flex items-center justify-center">
+              <span className="absolute top-0.5 right-0.5 sm:top-1 sm:right-1 w-3.5 h-3.5 sm:w-4 sm:h-4 bg-[#c5a059] text-white text-[8px] sm:text-[9px] font-bold rounded-full flex items-center justify-center">
                 {wishlist.length}
               </span>
             )}
@@ -288,12 +312,12 @@ export const Navbar = () => {
           {/* Shopping Bag Button */}
           <button
             onClick={() => navigateTo('cart-checkout')}
-            className="relative p-2 text-[#222] hover:text-black transition-colors flex items-center gap-1.5"
+            className="relative p-1.5 sm:p-2 text-[#222] hover:text-black transition-colors flex items-center gap-1.5"
             title="Shopping Bag & Checkout"
           >
-            <ShoppingBag size={20} />
+            <ShoppingBag size={19} />
             {cartItemsCount > 0 && (
-              <span className="absolute top-1 right-1 w-4 h-4 bg-black text-white text-[9px] font-bold rounded-full flex items-center justify-center">
+              <span className="absolute top-0.5 right-0.5 sm:top-1 sm:right-1 w-3.5 h-3.5 sm:w-4 sm:h-4 bg-black text-white text-[8px] sm:text-[9px] font-bold rounded-full flex items-center justify-center">
                 {cartItemsCount}
               </span>
             )}
@@ -303,26 +327,26 @@ export const Navbar = () => {
           <div className="relative">
             <button
               onClick={() => setIsUserMenuOpen(!isUserMenuOpen)}
-              className="p-1.5 flex items-center gap-2 rounded hover:bg-[#f2efe9] transition-colors"
+              className="p-1 sm:p-1.5 flex items-center gap-1 sm:gap-2 rounded hover:bg-[#f2efe9] transition-colors"
             >
               <img
                 src={currentUser.avatar}
                 alt={currentUser.name}
-                className="w-7 h-7 rounded-full object-cover border border-[#c5a059]"
+                className="w-6 h-6 sm:w-7 sm:h-7 rounded-full object-cover border border-[#c5a059]"
               />
               <span className="hidden lg:inline text-xs font-semibold text-[#111] max-w-[100px] truncate">
                 {currentUser.name}
               </span>
-              <ChevronDown size={12} className="text-[#666]" />
+              <ChevronDown size={11} className="text-[#666]" />
             </button>
 
             {isUserMenuOpen && (
               <div
-                className="absolute right-0 mt-2 w-64 bg-white border border-[#e6e2db] shadow-2xl rounded-sm py-2 z-50"
+                className="absolute right-0 mt-2 w-64 max-w-[calc(100vw-1.5rem)] bg-white border border-[#e6e2db] shadow-2xl rounded-sm py-2 z-50"
                 onMouseLeave={() => setIsUserMenuOpen(false)}
               >
                 <div className="px-4 py-2 border-b border-[#f0ece5]">
-                  <div className="font-semibold text-xs text-[#0a0a0a]">{currentUser.name}</div>
+                  <div className="font-semibold text-xs text-[#0a0a0a] truncate">{currentUser.name}</div>
                   <div className="text-[11px] text-[#666] truncate">{currentUser.email}</div>
                   <div className="mt-1">
                     <span className="badge-gold text-[9px]">
@@ -358,6 +382,7 @@ export const Navbar = () => {
                   <button
                     onClick={() => {
                       switchRole('vendor');
+                      navigateTo('vendor-dashboard');
                       setIsUserMenuOpen(false);
                     }}
                     className="w-full text-left px-4 py-2 text-xs text-amber-900 bg-amber-50/50 hover:bg-amber-100/70 flex items-center gap-2.5"
@@ -370,6 +395,7 @@ export const Navbar = () => {
                   <button
                     onClick={() => {
                       switchRole('admin');
+                      navigateTo('admin-dashboard');
                       setIsUserMenuOpen(false);
                     }}
                     className="w-full text-left px-4 py-2 text-xs text-purple-900 bg-purple-50/50 hover:bg-purple-100/70 flex items-center gap-2.5"
@@ -408,7 +434,131 @@ export const Navbar = () => {
         </div>
       </div>
 
-      {/* 3. Luxury Navigation Bar (5 Main Pages + Categories) */}
+      {/* Mobile Navigation Drawer / Menu */}
+      {isMobileMenuOpen && (
+        <div className="md:hidden bg-white border-t border-[#eae5dc] shadow-xl animate-fadeIn">
+          <div className="px-4 py-3 space-y-3">
+            <div className="text-[10px] font-bold uppercase tracking-widest text-gray-400">
+              Main Navigation
+            </div>
+            <div className="grid grid-cols-1 gap-1 text-xs font-semibold">
+              <button
+                onClick={() => {
+                  navigateTo('home');
+                  setIsMobileMenuOpen(false);
+                }}
+                className={`w-full text-left py-2 px-3 rounded flex items-center justify-between ${
+                  activePage === 'home' ? 'bg-black text-white' : 'text-gray-800 hover:bg-gray-100'
+                }`}
+              >
+                <span>01. HOME EDIT</span>
+                <ArrowRight size={13} />
+              </button>
+
+              <button
+                onClick={() => {
+                  setCategoryFilter('all');
+                  navigateTo('shop');
+                  setIsMobileMenuOpen(false);
+                }}
+                className={`w-full text-left py-2 px-3 rounded flex items-center justify-between ${
+                  activePage === 'shop' ? 'bg-black text-white' : 'text-gray-800 hover:bg-gray-100'
+                }`}
+              >
+                <span>02. SHOP ALL LUXURY</span>
+                <ArrowRight size={13} />
+              </button>
+
+              <button
+                onClick={() => {
+                  navigateTo('product-detail', 'prod-001');
+                  setIsMobileMenuOpen(false);
+                }}
+                className={`w-full text-left py-2 px-3 rounded flex items-center justify-between ${
+                  activePage === 'product-detail' ? 'bg-black text-white' : 'text-gray-800 hover:bg-gray-100'
+                }`}
+              >
+                <span>03. PRODUCT SHOWCASE</span>
+                <ArrowRight size={13} />
+              </button>
+
+              <button
+                onClick={() => {
+                  navigateTo('cart-checkout');
+                  setIsMobileMenuOpen(false);
+                }}
+                className={`w-full text-left py-2 px-3 rounded flex items-center justify-between ${
+                  activePage === 'cart-checkout' ? 'bg-black text-white' : 'text-gray-800 hover:bg-gray-100'
+                }`}
+              >
+                <span>04. BAG & CHECKOUT ({cartItemsCount})</span>
+                <ArrowRight size={13} />
+              </button>
+
+              <button
+                onClick={() => {
+                  navigateTo('account');
+                  setIsMobileMenuOpen(false);
+                }}
+                className={`w-full text-left py-2 px-3 rounded flex items-center justify-between ${
+                  activePage === 'account' ? 'bg-black text-white' : 'text-gray-800 hover:bg-gray-100'
+                }`}
+              >
+                <span>05. CLIENT ACCOUNT</span>
+                <ArrowRight size={13} />
+              </button>
+            </div>
+
+            <div className="border-t border-[#ece7de] pt-2">
+              <div className="text-[10px] font-bold uppercase tracking-widest text-gray-400 mb-1.5">
+                Departments
+              </div>
+              <div className="flex flex-wrap gap-1.5">
+                {['Women', 'Men', 'Bags', 'Jewelry'].map((cat) => (
+                  <button
+                    key={cat}
+                    onClick={() => {
+                      setCategoryFilter(cat);
+                      navigateTo('shop');
+                      setIsMobileMenuOpen(false);
+                    }}
+                    className="px-2.5 py-1 bg-[#f3efe8] hover:bg-[#e7e1d6] text-[11px] font-medium rounded text-gray-800"
+                  >
+                    {cat}
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            <div className="border-t border-[#ece7de] pt-2 grid grid-cols-2 gap-2">
+              <button
+                onClick={() => {
+                  switchRole('vendor');
+                  navigateTo('vendor-dashboard');
+                  setIsMobileMenuOpen(false);
+                }}
+                className="py-2 px-2.5 text-[11px] font-semibold text-amber-900 bg-amber-50 border border-amber-200 rounded flex items-center justify-center gap-1.5"
+              >
+                <Store size={13} />
+                <span>Vendor Suite</span>
+              </button>
+              <button
+                onClick={() => {
+                  switchRole('admin');
+                  navigateTo('admin-dashboard');
+                  setIsMobileMenuOpen(false);
+                }}
+                className="py-2 px-2.5 text-[11px] font-semibold text-purple-900 bg-purple-50 border border-purple-200 rounded flex items-center justify-center gap-1.5"
+              >
+                <ShieldCheck size={13} />
+                <span>Admin Suite</span>
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* 3. Luxury Navigation Bar (Desktop 5 Main Pages + Categories) */}
       <nav className="bg-[#faf9f6] border-t border-[#ece7de] hidden md:block overflow-x-auto no-scrollbar">
         <div className="luxury-container flex items-center justify-center gap-6 lg:gap-8 py-2.5 text-[11px] lg:text-xs font-semibold tracking-luxury text-[#2a2a2a] whitespace-nowrap flex-nowrap">
           <button

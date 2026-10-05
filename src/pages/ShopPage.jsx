@@ -640,6 +640,198 @@ export const ShopPage = () => {
           </main>
         </div>
       </div>
+
+      {/* ================= MOBILE FILTER MODAL / DRAWER ================= */}
+      {isMobileFilterOpen && (
+        <div className="fixed inset-0 z-50 flex flex-col justify-end md:hidden">
+          {/* Backdrop */}
+          <div
+            className="fixed inset-0 bg-black/60 backdrop-blur-sm transition-opacity"
+            onClick={() => setIsMobileFilterOpen(false)}
+          />
+
+          {/* Drawer Container */}
+          <div className="relative bg-white w-full max-h-[88vh] rounded-t-xl shadow-2xl flex flex-col z-10 animate-slideUp">
+            {/* Drawer Header */}
+            <div className="px-5 py-4 border-b border-gray-200 flex items-center justify-between bg-[#faf9f7] rounded-t-xl shrink-0">
+              <div className="flex items-center gap-2">
+                <SlidersHorizontal size={16} className="text-[#c5a059]" />
+                <span className="font-serif font-bold text-base text-gray-900">
+                  Refine & Filter
+                </span>
+                {hasActiveFilters && (
+                  <span className="bg-[#c5a059] text-white text-[10px] font-bold px-2 py-0.5 rounded-full">
+                    Active
+                  </span>
+                )}
+              </div>
+              <button
+                onClick={() => setIsMobileFilterOpen(false)}
+                className="p-1.5 text-gray-500 hover:text-black rounded-full hover:bg-gray-100 transition-colors"
+              >
+                <X size={20} />
+              </button>
+            </div>
+
+            {/* Scrollable Filter Content */}
+            <div className="p-5 overflow-y-auto space-y-6 flex-1 text-xs">
+              {/* 1. Department */}
+              <div>
+                <h4 className="font-bold uppercase tracking-wider text-gray-800 mb-2">
+                  Department
+                </h4>
+                <div className="grid grid-cols-2 gap-1.5">
+                  <button
+                    onClick={() => setCategoryFilter('all')}
+                    className={`py-2 px-3 rounded-xs border text-left flex items-center justify-between ${
+                      categoryFilter === 'all'
+                        ? 'bg-black text-white border-black font-semibold'
+                        : 'bg-gray-50 text-gray-700 border-gray-200'
+                    }`}
+                  >
+                    <span>All Collections</span>
+                  </button>
+                  {CATEGORIES.map((cat) => (
+                    <button
+                      key={cat.id}
+                      onClick={() => setCategoryFilter(cat.id)}
+                      className={`py-2 px-3 rounded-xs border text-left flex items-center justify-between ${
+                        categoryFilter.toLowerCase() === cat.id.toLowerCase()
+                          ? 'bg-black text-white border-black font-semibold'
+                          : 'bg-gray-50 text-gray-700 border-gray-200'
+                      }`}
+                    >
+                      <span>{cat.name}</span>
+                      <span className="text-[10px] opacity-70">({cat.count})</span>
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              {/* 2. Partner Boutique */}
+              <div className="border-t border-gray-200 pt-4">
+                <h4 className="font-bold uppercase tracking-wider text-gray-800 mb-2">
+                  Partner Boutique
+                </h4>
+                <div className="space-y-1 max-h-40 overflow-y-auto">
+                  <button
+                    onClick={() => setVendorFilter('all')}
+                    className={`w-full py-2 px-3 rounded-xs border text-left flex items-center justify-between ${
+                      vendorFilter === 'all'
+                        ? 'bg-black text-white border-black font-semibold'
+                        : 'bg-gray-50 text-gray-700 border-gray-200'
+                    }`}
+                  >
+                    <span>All Boutiques</span>
+                  </button>
+                  {vendors.map((v) => (
+                    <button
+                      key={v.id}
+                      onClick={() => setVendorFilter(v.id)}
+                      className={`w-full py-2 px-3 rounded-xs border text-left flex items-center justify-between ${
+                        vendorFilter === v.id
+                          ? 'bg-black text-white border-black font-semibold'
+                          : 'bg-gray-50 text-gray-700 border-gray-200'
+                      }`}
+                    >
+                      <span className="truncate">{v.name}</span>
+                      <span className="text-[10px] opacity-70">{v.city}</span>
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              {/* 3. Designer Brand */}
+              <div className="border-t border-gray-200 pt-4">
+                <h4 className="font-bold uppercase tracking-wider text-gray-800 mb-2">
+                  Designer Brand
+                </h4>
+                <div className="space-y-1 max-h-40 overflow-y-auto">
+                  <button
+                    onClick={() => setBrandFilter('all')}
+                    className={`w-full py-2 px-3 rounded-xs border text-left flex items-center justify-between ${
+                      brandFilter === 'all'
+                        ? 'bg-black text-white border-black font-semibold'
+                        : 'bg-gray-50 text-gray-700 border-gray-200'
+                    }`}
+                  >
+                    <span>All Designers</span>
+                  </button>
+                  {allBrands.map((brand) => (
+                    <button
+                      key={brand}
+                      onClick={() => setBrandFilter(brand)}
+                      className={`w-full py-2 px-3 rounded-xs border text-left flex items-center justify-between ${
+                        brandFilter === brand
+                          ? 'bg-black text-white border-black font-semibold'
+                          : 'bg-gray-50 text-gray-700 border-gray-200'
+                      }`}
+                    >
+                      <span>{brand}</span>
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              {/* 4. Price Max Range */}
+              <div className="border-t border-gray-200 pt-4">
+                <div className="flex items-center justify-between mb-2">
+                  <h4 className="font-bold uppercase tracking-wider text-gray-800">
+                    Max Price
+                  </h4>
+                  <span className="font-serif font-bold text-sm text-black">
+                    {formatPrice(priceMax)}
+                  </span>
+                </div>
+                <input
+                  type="range"
+                  min={500}
+                  max={10000}
+                  step={250}
+                  value={priceMax}
+                  onChange={(e) => setPriceMax(Number(e.target.value))}
+                  className="w-full accent-black cursor-pointer"
+                />
+                <div className="flex justify-between text-[10px] text-gray-400 mt-1">
+                  <span>$500</span>
+                  <span>$5,000</span>
+                  <span>$10,000+</span>
+                </div>
+              </div>
+
+              {/* 5. In Stock */}
+              <div className="border-t border-gray-200 pt-4">
+                <label className="flex items-center gap-2.5 text-xs text-gray-700 cursor-pointer">
+                  <input
+                    type="checkbox"
+                    checked={inStockOnly}
+                    onChange={(e) => setInStockOnly(e.target.checked)}
+                    className="accent-black w-4 h-4 rounded"
+                  />
+                  <span className="font-medium">In Stock Only (Immediate Dispatch)</span>
+                </label>
+              </div>
+            </div>
+
+            {/* Drawer Footer Actions */}
+            <div className="p-4 border-t border-gray-200 bg-white flex items-center gap-3 shrink-0">
+              <button
+                onClick={resetFilters}
+                className="btn-secondary !py-2.5 text-xs flex-1 flex items-center justify-center gap-1.5"
+              >
+                <RotateCcw size={13} />
+                <span>Reset All</span>
+              </button>
+              <button
+                onClick={() => setIsMobileFilterOpen(false)}
+                className="btn-primary !py-2.5 text-xs flex-[2] flex items-center justify-center gap-1.5"
+              >
+                <span>View {filteredProducts.length} Pieces</span>
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

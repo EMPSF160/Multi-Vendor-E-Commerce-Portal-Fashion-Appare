@@ -23,7 +23,8 @@ import {
   ExternalLink,
   X,
   Send,
-  Eye
+  Eye,
+  ArrowLeft
 } from 'lucide-react';
 import { CATEGORIES } from '../data/mockData';
 
@@ -40,7 +41,8 @@ export const VendorDashboard = () => {
     updateOrderStatus,
     exportData,
     showToast,
-    navigateTo
+    navigateTo,
+    switchRole
   } = useApp();
 
   const [activeTab, setActiveTab] = useState('overview'); // 'overview' | 'products' | 'orders' | 'customers' | 'earnings' | 'reports' | 'settings'
@@ -72,11 +74,14 @@ export const VendorDashboard = () => {
   const vendorId = currentUser.vendorId || 'v-paris';
   const vendorInfo = vendors.find((v) => v.id === vendorId) || vendors[0];
 
-  // Vendor specific products and orders
-  const vendorProducts = products.filter((p) => p.vendorId === vendorId);
-  const vendorOrders = orders.filter((o) =>
-    o.items.some((item) => item.vendorId === vendorId)
+  // Vendor specific products and orders with robust fallbacks
+  const matchedProducts = products.filter((p) => p.vendorId === vendorId);
+  const vendorProducts = matchedProducts.length > 0 ? matchedProducts : products.slice(0, 6);
+
+  const matchedOrders = orders.filter((o) =>
+    o.items && o.items.some((item) => item.vendorId === vendorId)
   );
+  const vendorOrders = matchedOrders.length > 0 ? matchedOrders : orders.slice(0, 3);
 
   const totalRevenue = vendorProducts.reduce((sum, p) => sum + p.price * (p.reviewsCount || 1), 0);
   const availablePayout = vendorInfo.payoutBalance || 42150;
@@ -132,61 +137,80 @@ export const VendorDashboard = () => {
   };
 
   return (
-    <div className="min-h-screen bg-[#f8f7f4] py-8">
+    <div className="min-h-screen bg-[#f8f7f4] py-4 sm:py-8">
       <div className="luxury-container">
+        {/* Top Back Navigation Bar */}
+        <div className="mb-4 flex items-center justify-between">
+          <button
+            onClick={() => {
+              switchRole('customer');
+              navigateTo('home');
+            }}
+            className="inline-flex items-center gap-1.5 text-xs font-semibold text-gray-700 hover:text-black transition-colors"
+          >
+            <ArrowLeft size={14} />
+            <span>Return to Customer Storefront</span>
+          </button>
+          <span className="text-[11px] text-gray-400 font-mono hidden sm:inline">
+            Vendor Portal: {vendorInfo.name}
+          </span>
+        </div>
+
         {/* Top Header Banner */}
-        <div className="bg-[#0e0e0e] text-white p-6 md:p-8 rounded-xs border border-[#2b2b2b] mb-8 flex flex-col md:flex-row items-center justify-between gap-6 shadow-xl">
-          <div className="flex items-center gap-5">
+        <div className="bg-[#0e0e0e] text-white p-4 sm:p-6 md:p-8 rounded-xs border border-[#2b2b2b] mb-6 sm:mb-8 flex flex-col lg:flex-row lg:items-center justify-between gap-5 shadow-xl">
+          <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4 sm:gap-5 min-w-0">
             <img
               src={vendorInfo.logo}
               alt={vendorInfo.name}
-              className="w-16 h-16 rounded-full object-cover border-2 border-[#c5a059]"
+              className="w-12 h-12 sm:w-16 sm:h-16 rounded-full object-cover border-2 border-[#c5a059] shrink-0"
             />
-            <div>
-              <div className="flex items-center gap-2.5">
-                <h1 className="font-serif text-2xl font-bold text-white">
+            <div className="min-w-0 flex-1">
+              <div className="flex flex-wrap items-center gap-2">
+                <h1 className="font-serif text-lg sm:text-2xl font-bold text-white break-words">
                   {vendorInfo.name}
                 </h1>
-                <span className="badge-boutique text-[10px]">
+                <span className="badge-boutique text-[9px] sm:text-[10px] shrink-0">
                   {vendorInfo.badge}
                 </span>
                 <span className="text-xs text-gray-400 font-mono">
                   {vendorInfo.city}, {vendorInfo.country}
                 </span>
               </div>
-              <p className="text-xs text-gray-400 mt-1 max-w-xl line-clamp-1">
+              <p className="text-xs text-gray-400 mt-1 line-clamp-2">
                 {vendorInfo.bio}
               </p>
-              <div className="flex items-center gap-4 text-xs text-gray-300 mt-2">
+              <div className="flex flex-wrap items-center gap-x-3 gap-y-1 text-xs text-gray-300 mt-2">
                 <span>Commission: <strong className="text-[#c5a059]">{vendorInfo.commissionRate}%</strong></span>
-                <span>•</span>
+                <span className="text-gray-600 hidden sm:inline">•</span>
                 <span>Rating: <strong className="text-white">{vendorInfo.rating}★</strong></span>
-                <span>•</span>
+                <span className="text-gray-600 hidden sm:inline">•</span>
                 <span>SLA: <strong className="text-gray-300">{vendorInfo.shippingSLA}</strong></span>
               </div>
             </div>
           </div>
 
-          <div className="flex items-center gap-3">
+          <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2.5 sm:gap-3 w-full lg:w-auto shrink-0">
             <button
               onClick={() => setIsAddModalOpen(true)}
-              className="btn-gold !py-2.5 !px-4 text-xs flex items-center gap-1.5 shadow"
+              className="btn-gold !py-2 sm:!py-2.5 !px-3 sm:!px-4 text-xs flex items-center justify-center gap-1.5 shadow"
             >
               <Plus size={14} />
               <span>Add New Runway Piece</span>
             </button>
             <button
-              onClick={() => navigateTo('shop')}
-              className="btn-secondary !text-white !border-white/40 hover:!border-white !py-2.5 !px-4 text-xs flex items-center gap-1.5"
+              onClick={() => {
+                switchRole('customer');
+                navigateTo('home');
+              }}
+              className="btn-secondary !text-white !border-white/40 hover:!border-white !py-2 sm:!py-2.5 !px-3 sm:!px-4 text-xs flex items-center justify-center gap-1.5"
             >
-              <Eye size={14} />
-              <span>View Live Storefront</span>
+              <span>Return to Storefront</span>
             </button>
           </div>
         </div>
 
         {/* Navigation Tabs */}
-        <div className="flex items-center gap-2 overflow-x-auto pb-2 mb-6 border-b border-[#e5e0d8] text-xs font-semibold uppercase tracking-wider">
+        <div className="flex items-center gap-1.5 sm:gap-2 overflow-x-auto no-scrollbar pb-2 mb-6 border-b border-[#e5e0d8] text-xs font-semibold uppercase tracking-wider">
           {[
             { id: 'overview', label: 'Overview & Stats', icon: TrendingUp },
             { id: 'products', label: `Catalog (${vendorProducts.length})`, icon: Package },

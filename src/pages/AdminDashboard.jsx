@@ -23,7 +23,8 @@ import {
   DollarSign,
   Globe,
   ArrowUpRight,
-  ExternalLink
+  ExternalLink,
+  ArrowLeft
 } from 'lucide-react';
 import { CURRENCY_RATES } from '../data/mockData';
 
@@ -54,55 +55,75 @@ export const AdminDashboard = () => {
   );
 
   return (
-    <div className="min-h-screen bg-[#f8f7f4] py-8">
+    <div className="min-h-screen bg-[#f8f7f4] py-4 sm:py-8">
       <div className="luxury-container">
+        {/* Top Back Navigation Bar */}
+        <div className="mb-4 flex items-center justify-between">
+          <button
+            onClick={() => {
+              switchRole('customer');
+              navigateTo('home');
+            }}
+            className="inline-flex items-center gap-1.5 text-xs font-semibold text-gray-700 hover:text-black transition-colors"
+          >
+            <ArrowLeft size={14} />
+            <span>Return to Customer Storefront</span>
+          </button>
+          <span className="text-[11px] text-gray-400 font-mono hidden sm:inline">
+            Admin Session: {currentUser.name}
+          </span>
+        </div>
+
         {/* Admin Header Bar */}
-        <div className="bg-[#0a0a0a] text-white p-6 md:p-8 rounded-xs border border-[#2b2b2b] mb-8 flex flex-col md:flex-row items-center justify-between gap-6 shadow-2xl">
-          <div className="flex items-center gap-5">
-            <div className="w-16 h-16 rounded-full bg-[#1c1c1c] border-2 border-purple-500 flex items-center justify-center text-purple-400">
-              <ShieldCheck size={32} />
+        <div className="bg-[#0a0a0a] text-white p-4 sm:p-6 md:p-8 rounded-xs border border-[#2b2b2b] mb-6 sm:mb-8 flex flex-col lg:flex-row lg:items-center justify-between gap-5 shadow-2xl">
+          <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4 sm:gap-5 min-w-0">
+            <div className="w-12 h-12 sm:w-16 sm:h-16 rounded-full bg-[#1c1c1c] border-2 border-purple-500 flex items-center justify-center text-purple-400 shrink-0">
+              <ShieldCheck className="w-6 h-6 sm:w-8 sm:h-8" />
             </div>
-            <div>
-              <div className="flex items-center gap-2.5">
-                <h1 className="font-serif text-2xl font-bold text-white">
+            <div className="min-w-0 flex-1">
+              <div className="flex flex-wrap items-center gap-2">
+                <h1 className="font-serif text-lg sm:text-2xl font-bold text-white break-words">
                   AURA LUXE Global Admin HQ
                 </h1>
-                <span className="badge-luxury text-[10px] !bg-purple-950 !text-purple-300 !border !border-purple-700">
+                <span className="badge-luxury text-[9px] sm:text-[10px] !bg-purple-950 !text-purple-300 !border !border-purple-700 shrink-0">
                   ROOT SUPER-ADMIN
                 </span>
               </div>
-              <p className="text-xs text-gray-400 mt-1">
+              <p className="text-xs text-gray-400 mt-1 line-clamp-2">
                 Executive platform control: Multi-vendor moderation, RBAC access control & escrow analytics
               </p>
-              <div className="flex items-center gap-4 text-xs text-gray-300 mt-2">
+              <div className="flex flex-wrap items-center gap-x-3 gap-y-1 text-xs text-gray-300 mt-2">
                 <span>Administrator: <strong className="text-white">{currentUser.name}</strong></span>
-                <span>•</span>
+                <span className="text-gray-600 hidden sm:inline">•</span>
                 <span>Active Boutiques: <strong className="text-emerald-400">{vendors.filter(v => v.status === 'Active').length}</strong></span>
-                <span>•</span>
+                <span className="text-gray-600 hidden sm:inline">•</span>
                 <span>Platform GMV: <strong className="text-[#c5a059]">{formatPrice(totalGMV)}</strong></span>
               </div>
             </div>
           </div>
 
-          <div className="flex items-center gap-3">
+          <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2.5 sm:gap-3 w-full lg:w-auto shrink-0">
             <button
               onClick={() => exportData('orders', 'csv')}
-              className="btn-gold !py-2.5 !px-4 text-xs flex items-center gap-1.5 shadow"
+              className="btn-gold !py-2 sm:!py-2.5 !px-3 sm:!px-4 text-xs flex items-center justify-center gap-1.5 shadow"
             >
               <Download size={14} />
               <span>Full Audit Export</span>
             </button>
             <button
-              onClick={() => switchRole('customer')}
-              className="btn-secondary !text-white !border-white/40 hover:!border-white !py-2.5 !px-4 text-xs"
+              onClick={() => {
+                switchRole('customer');
+                navigateTo('home');
+              }}
+              className="btn-secondary !text-white !border-white/40 hover:!border-white !py-2 sm:!py-2.5 !px-3 sm:!px-4 text-xs flex items-center justify-center gap-1.5"
             >
-              Switch to Storefront
+              <span>Switch to Storefront</span>
             </button>
           </div>
         </div>
 
         {/* Navigation Tabs */}
-        <div className="flex items-center gap-2 overflow-x-auto pb-2 mb-6 border-b border-[#e5e0d8] text-xs font-semibold uppercase tracking-wider">
+        <div className="flex items-center gap-1.5 sm:gap-2 overflow-x-auto no-scrollbar pb-2 mb-6 border-b border-[#e5e0d8] text-xs font-semibold uppercase tracking-wider">
           {[
             { id: 'overview', label: 'Overview & KPIs', icon: TrendingUp },
             { id: 'vendors', label: `Vendors (${vendors.length})`, icon: Store },
